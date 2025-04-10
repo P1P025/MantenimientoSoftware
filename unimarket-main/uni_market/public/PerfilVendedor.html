@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil del Vendedor</title>
+  <link rel="stylesheet" href="estilos/EstilosPerfilCom.css"/>
+</head>
+<body>
+
+  <header>
+    <h1>Mi Perfil</h1>
+  </header>
+
+  <nav class="navbar">
+    <a href="VendedorHome.html">Inicio</a>
+    <a href="Inventario.html">Inventario</a>
+    <a href="PerfilVendedor.html">Perfil</a>
+    <a href="Pedidos.html">Pedidos</a>
+    <a href="CerrarSesion.html">Cerrar sesión</a>
+  </nav>
+
+  <main class="perfil-container">
+    <section class="perfil-info">
+      <img src="img/perfil.png" alt="Foto de Perfil" class="foto-perfil" />
+      <!-- Mostrar datos del vendedor -->
+      <h2 id="nombreVendedor">Juan Pérez</h2>
+      <p><strong>Rol:</strong> <span id="rolVendedor">Vendedor</span></p>
+      <p><strong>Cédula:</strong> <span id="cedulaVendedor">123456789</span></p>
+      <p><strong>Correo:</strong> <span id="correoVendedor">jperez@amigo.edu.co</span></p>
+    </section>
+
+    <section class="perfil-formulario">
+      <h3>Cambiar Contraseña</h3>
+      <form id="cambiarContraseñaForm">
+        <label>Nueva Contraseña:
+          <input type="password" id="nuevaContraseña" placeholder="Nueva contraseña" required />
+        </label>
+
+        <label>Confirmar Nueva Contraseña:
+          <input type="password" id="confirmarContraseña" placeholder="Confirmar nueva contraseña" required />
+        </label>
+
+        <button type="submit">Guardar Cambios</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Mostrar los datos del vendedor desde localStorage
+    const nombre = localStorage.getItem('nombres');
+    const correo = localStorage.getItem('correo');
+    const cedula = localStorage.getItem('cedula');
+    const rol = localStorage.getItem('rol');
+
+    if (nombre) {
+      document.getElementById('nombreVendedor').textContent = nombre;
+    } else {
+      document.getElementById('nombreVendedor').textContent = 'No disponible';
+    }
+
+    if (correo) {
+      document.getElementById('correoVendedor').textContent = correo;
+    } else {
+      document.getElementById('correoVendedor').textContent = 'No disponible';
+    }
+
+    if (cedula) {
+      document.getElementById('cedulaVendedor').textContent = cedula;
+    } else {
+      document.getElementById('cedulaVendedor').textContent = 'No disponible';
+    }
+
+    if (rol) {
+      document.getElementById('rolVendedor').textContent = rol;
+    } else {
+      document.getElementById('rolVendedor').textContent = 'No disponible';
+    }
+
+    // Función para cambiar la contraseña
+    document.getElementById('cambiarContraseñaForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const nuevaContraseña = document.getElementById('nuevaContraseña').value;
+      const confirmarContraseña = document.getElementById('confirmarContraseña').value;
+
+      if (nuevaContraseña === confirmarContraseña) {
+        // Aquí podrías agregar la lógica para hacer la solicitud al servidor y actualizar la contraseña en la base de datos
+
+        // Ejemplo con fetch para actualizar la contraseña en el backend
+        fetch('http://localhost:3000/actualizar-contraseña', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nuevaContraseña: nuevaContraseña,
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.mensaje); // Mostrar el mensaje que te devuelva el servidor
+        })
+        .catch(error => {
+          console.error('Error al cambiar la contraseña:', error);
+          alert('Ocurrió un error al cambiar la contraseña. Intenta de nuevo.');
+        });
+
+        // Actualizar la contraseña en localStorage (solo para demostración, esto debe ser también en el servidor)
+        localStorage.setItem('contraseña', nuevaContraseña);
+
+        // Limpiar el formulario
+        document.getElementById('cambiarContraseñaForm').reset();
+      } else {
+        alert('Las contraseñas no coinciden. Por favor, intenta de nuevo.');
+      }
+    });
+  </script>
+
+</body>
+</html>

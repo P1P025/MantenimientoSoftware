@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventario - Vendedor | Unimarket</title>
+    <link rel="stylesheet" href="estilos/EstilosGlobal.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Inventario</h1>
+    </header>
+    <nav class="navbar">
+        <a href="VendedorHome.html">Inicio</a>
+        <a href="InventarioVendedor.html">Inventario</a>
+        <a href="PerfilVendedor.html">Perfil</a>
+        <a href="PedidosVendedor.html">Pedidos</a>
+        <div class="usuario-info">
+            <span id="bienvenida"></span>
+            <button onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
+    </nav>
+
+
+    <main class="landing-container">
+        <section class="landing-card">
+            <h2>Mi Inventario</h2>
+            <p>Administra tus productos disponibles:</p>
+
+            <!-- Dentro de <section class="landing-card"> en InventarioVendedor.html -->
+            <section class="landing-card">
+                <h2>Inventario de Productos</h2>
+                <button id="btnAgregarProducto" class="btn-landing">Agregar Producto</button>
+
+                <!-- Formulario de agregar producto (inicialmente oculto) -->
+                <div id="formProductoContainer" style="display: none;">
+                    <form id="formProducto" class="form-producto">
+                        <input type="text" id="nombreProducto" placeholder="Nombre del Producto" required />
+                        <input type="text" id="caracteristicasProducto" placeholder="Variedad y Características"
+                            required />
+                        <input type="number" id="stockProducto" placeholder="Stock" required />
+                        <textarea id="descripcionProducto" placeholder="Descripción del Producto" required></textarea>
+                        <input type="number" id="precioProducto" placeholder="Precio del Producto" required />
+
+                        <!-- Fechas y horas de disponibilidad -->
+                        <label for="fechaDisponibleInicio">Fecha de disponibilidad desde:</label>
+                        <input type="datetime-local" id="fechaDisponibleInicio" required />
+
+                        <label for="fechaDisponibleFin">Fecha de disponibilidad hasta:</label>
+                        <input type="datetime-local" id="fechaDisponibleFin" required />
+
+                        <!-- Imagen del producto -->
+                        <input type="file" id="imagenProducto" accept="image/*" />
+                        <button type="submit" class="btn-landing">Agregar Producto</button>
+                    </form>
+                </div>
+            </section>
+
+
+
+            <table class="tabla-inventario">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Arepas rellenas</td>
+                        <td>Alimentos</td>
+                        <td>$5.000</td>
+                        <td>12</td>
+                        <td><button class="btn-editar">Editar</button> <button class="btn-eliminar">Eliminar</button>
+                        </td>
+                    </tr>
+                    <!-- Más filas dinámicas aquí -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        const nombre = localStorage.getItem('nombres');
+        const bienvenida = document.getElementById('bienvenida');
+        if (nombre) {
+            bienvenida.textContent = `Hola, ${nombre}`;
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // JavaScript para mostrar/ocultar el formulario de agregar producto
+        document.getElementById('btnAgregarProducto').addEventListener('click', function () {
+            // Obtener el contenedor del formulario
+            const formContainer = document.getElementById('formProductoContainer');
+
+            // Mostrar o esconder el formulario
+            if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+                formContainer.style.display = 'block';
+            } else {
+                formContainer.style.display = 'none';
+            }
+        });
+
+        // Lógica para enviar el formulario
+        document.getElementById('formProducto').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Capturar los datos del formulario
+            const nombre = document.getElementById('nombreProducto').value;
+            const caracteristicas = document.getElementById('caracteristicasProducto').value;
+            const stock = document.getElementById('stockProducto').value;
+            const descripcion = document.getElementById('descripcionProducto').value;
+            const precio = document.getElementById('precioProducto').value;
+            const fechaDisponibleInicio = document.getElementById('fechaDisponibleInicio').value;
+            const fechaDisponibleFin = document.getElementById('fechaDisponibleFin').value;
+            const imagen = document.getElementById('imagenProducto').files[0];
+
+            const formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('caracteristicas', caracteristicas);
+            formData.append('stock', stock);
+            formData.append('descripcion', descripcion);
+            formData.append('precio', precio);
+            formData.append('fechaDisponibleInicio', fechaDisponibleInicio);
+            formData.append('fechaDisponibleFin', fechaDisponibleFin);
+            if (imagen) {
+                formData.append('imagen', imagen);
+            }
+
+            // Enviar los datos al servidor
+            fetch('http://localhost:3000/agregarProducto', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Producto agregado correctamente');
+                        // Limpiar formulario
+                        document.getElementById('formProducto').reset();
+                        document.getElementById('formProductoContainer').style.display = 'none'; // Ocultar formulario después de enviar
+                    } else {
+                        alert('Hubo un error al agregar el producto');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al agregar el producto:', error);
+                });
+        });
+
+    </script>
+</body>
+
+</html>
