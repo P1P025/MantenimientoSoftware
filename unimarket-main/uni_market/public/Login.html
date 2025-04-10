@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="estilos/loginregister.css" />
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Iniciar Sesión</h2>
+    <form id="loginForm">
+      <input type="email" name="correo" placeholder="Correo institucional" required />
+      <input type="password" name="contraseña" placeholder="Contraseña" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <a href="registro.html">¿No tienes cuenta? Regístrate</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        console.log(result);
+
+        if (res.ok) {
+          alert(result.mensaje);
+
+          // ✅ Guardar en localStorage
+          localStorage.setItem('nombres', result.usuario.nombres);
+          localStorage.setItem('rol', result.rol);
+          localStorage.setItem('cedula', result.usuario.cedula);  // Asegúrate de guardar la cédula
+          localStorage.setItem('correo', result.usuario.correo);
+
+          // ✅ Redirigir según rol
+          if (result.rol === 'vendedor') {
+            window.location.href = 'VendedorHome.html';
+          } else if (result.rol === 'comprador') {
+            window.location.href = 'CompradorHome.html';
+          } else {
+            alert('Rol no reconocido');
+          }
+        } else {
+          alert(result.mensaje);
+        }
+
+      } catch (error) {
+        alert('Error al conectar con el servidor');
+        console.error(error);
+      }
+    });
+  </script>
+
+
+</body>
+
+</html>

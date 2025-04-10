@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productos - Alimentos</title>
+  <link rel="stylesheet" href="estilos/EstilosASO.css" />
+</head>
+
+<body>
+
+  <header>
+    <h1>Alimentos</h1>
+  </header>
+
+  <nav class="navbar">
+    <a href="CompradorHome.html">Inicio</a>
+    <a href="comprador.html#historial">Historial</a>
+    <a href="PerfilComprador.html">Perfil</a>
+    <a href="Alimentos.html" class="active">Alimentos</a>
+    <a href="Servicios.html">Servicios</a>
+    <a href="Otros.html">Otros</a>
+  </nav>
+  
+
+  <main class="container">
+
+    <!-- Aquí van tus tarjetas de productos como antes -->
+
+    <section class="producto-card">
+      <h2>Postre de milo</h2>
+      <img src="img/Postremilo.jpg" alt="Postre de milo" class="producto-img" />
+      <p><strong>Descripción:</strong> Postre de milo casero</p>
+      <p><strong>Precio:</strong> $10.000 por unidad</p>
+      <p><strong>Fechas disponibles:</strong> 10 al 15 de abril</p>
+      <p><strong>Horas de entrega:</strong> 9:00 AM – 6:00 PM</p>
+      <p><strong>Stock:</strong> 30 unidades</p>
+      <button class="btn-agregar" onclick="agregarAlCarrito('Postre de milo', 10000)">Agregar</button>
+
+      <button class="btn-ver" onclick="toggleDetalles(this)">Visualizar</button>
+
+      <div class="detalles oculto">
+        <p><strong>Descripción completa:</strong> ¡Explosión de Sabor con Milo! 🍫✨
+          Sumérgete en la nostalgia con este postre cremoso y lleno de energía. Una mezcla perfecta de suavidad y
+          crocante,
+          con capas de galleta, crema batida y el inconfundible sabor del Milo espolvoreado generosamente por encima.
+          Ideal para
+          los amantes del chocolate y los momentos dulces que se disfrutan con una cuchara. ¿Lo mejor? ¡Es tan fácil de
+          hacer como de amar! ❤️🥄</p>
+        <p><strong>Vendedor:</strong> Joaquin Higuita Lopez</p>
+        <p><strong>Contacto:</strong> +57 3206270582| joaquin.higuitalo@amigo.edu.co</p>
+      </div>
+    </section>
+
+    <section class="producto-card">
+      <h2>Hamburguesa Artesanal</h2>
+      <img src="img/HamburguesaArtesanal.jpg" alt="Hamburguesa Artesanal" class="producto-img" />
+      <p><strong>Descripción:</strong> Hamburguesa Artesanal</p>
+      <p><strong>Precio:</strong> $15.000 por unidad</p>
+      <p><strong>Fechas disponibles:</strong> 20 al 28 de abril</p>
+      <p><strong>Horas de entrega:</strong> 12:00 AM – 6:00 PM</p>
+      <p><strong>Stock:</strong> 15 unidades</p>
+      <button class="btn-agregar" onclick="agregarAlCarrito('Hamburguesa Artesanal', 15000)">Agregar</button>
+      <button class="btn-ver" onclick="toggleDetalles(this)">Visualizar</button>
+
+      <div class="detalles oculto">
+        <p><strong>Descripción completa:</strong> Hamburguesa Artesanal: Sabor que se Siente en Cada Mordida 🍔🔥
+          Jugosa, hecha a mano y con ingredientes frescos seleccionados al detalle. Nuestra hamburguesa artesanal
+          combina
+          un pan suave y dorado, carne 100% de res sazonada al punto perfecto, queso derretido, vegetales crujientes y
+          nuestras salsas
+          caseras que elevan cada bocado. No es solo una hamburguesa... es una experiencia de sabor auténtico. 😍🍟</p>
+        <p><strong>Vendedor:</strong> Joaquin Higuita Lopez</p>
+        <p><strong>Contacto:</strong> +57 3206270582| joaquin.higuitalo@amigo.edu.co</p>
+      </div>
+    </section>
+    <!-- ...otros productos -->
+
+  </main>
+  <script>
+    function toggleDetalles(boton) {
+      const detalles = boton.nextElementSibling;
+      detalles.classList.toggle("oculto");
+
+      // Cambiar texto del botón
+
+      boton.textContent = detalles.classList.contains("oculto") ? "Visualizar" : "Ocultar";
+    }
+  </script>
+  <script src="carrito.js" defer></script>
+  <!-- Botón flotante para abrir/ocultar carrito -->
+  <button id="toggleCarritoBtn" class="toggle-carrito-btn">
+    🛒 <span id="contadorCarrito">0</span>
+  </button>
+  
+  <!-- Carrito flotante lateral -->
+  <aside class="carrito-lateral" id="carritoLateral">
+    <h2>🛒 Carrito</h2>
+    <ul id="lista-carrito"></ul>
+    <p><strong>Total: $<span id="total">0</span></strong></p>
+  </aside>
+
+  <!-- Tu script de funcionalidad -->
+  <script src="carrito.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toggleBtn = document.getElementById("toggleCarritoBtn");
+      const carritoLateral = document.getElementById("carritoLateral");
+
+      toggleBtn.addEventListener("click", () => {
+        carritoLateral.classList.toggle("visible");
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>
